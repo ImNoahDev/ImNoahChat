@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
+import { clerkMiddleware } from "@clerk/nextjs/server";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { cn } from "@/lib/utils";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -18,12 +22,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${openSans.className} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={cn(openSans.className, "bg-white dark:bg-[#313338]")}
+        >
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem storageKey="im-noah-chat-theme">
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
